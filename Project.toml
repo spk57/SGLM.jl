@@ -1,0 +1,4 @@
+name = "SGLM"
+uuid = "1e8285f0-1bb8-4bac-85c3-66b8f7f71628"
+authors = ["spk57 <3463852+spk57@users.noreply.github.com>"]
+version = "0.1.0"
