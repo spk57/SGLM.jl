@@ -4,11 +4,17 @@ authors = ["spk57 <3463852+spk57@users.noreply.github.com>"]
 version = "0.1.0"
 
 [deps]
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 GLM = "38e38edf-8417-5370-95a0-9cbb8c7f171a"
 PkgTemplates = "14b8a8f1-9102-5b29-a752-f990bacb7fe1"
 Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
+Tables = "bd369af6-aec1-5ad0-b16a-f7cc5008161c"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
+DataFrames = "1.7.0"
 GLM = "1.9.0"
 PkgTemplates = "0.7.53"
 Revise = "3.6.4"
+Tables = "1.12.0"
+Test = "1.11.0"
