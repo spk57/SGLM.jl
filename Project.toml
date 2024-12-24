@@ -2,3 +2,13 @@ name = "SGLM"
 uuid = "1e8285f0-1bb8-4bac-85c3-66b8f7f71628"
 authors = ["spk57 <3463852+spk57@users.noreply.github.com>"]
 version = "0.1.0"
+
+[deps]
+GLM = "38e38edf-8417-5370-95a0-9cbb8c7f171a"
+PkgTemplates = "14b8a8f1-9102-5b29-a752-f990bacb7fe1"
+Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
+
+[compat]
+GLM = "1.9.0"
+PkgTemplates = "0.7.53"
+Revise = "3.6.4"
