@@ -1,0 +1,2 @@
+# SGLM
+Segmented GLM
