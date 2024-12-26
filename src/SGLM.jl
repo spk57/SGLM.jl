@@ -5,7 +5,7 @@ https://github.com/JuliaStats/GLM.jl.git
 """
 module SGLM
 
-export sglm
+export sglm, segment
 
 using GLM
 using DataFrames
@@ -22,22 +22,34 @@ Segment an array into <segments> evenly spaced segments.
 Returns a collection of <segments> views
 Note: Non evenly divisible rows are included in the last segment
 """
-function segment(a::Array, segments)
-  rows=size(a,1)
+# function segment(a::Array, segments)
+#   rows=size(a,1)
+#   (segLen, rem)=divrem(rows, segments)
+#   firstRow(s)=1+segLen*(s-1)
+#   lastRow(s)=segLen*s
+#   getRange(s)= s == segments ? range(firstRow(s), lastRow(s)+rem) : range(firstRow(s), lastRow(s)) 
+#   [view(a, getRange(n), : ) for n in 1:segments]
+# end
+
+"""
+Segment a dataframe into <segments> evenly spaced segments.  
+Returns a collection of <segments> views of dataframes
+Note: Non evenly divisible rows are included in the last segment
+"""
+function segment(df::DataFrame, segments)
+  rows=size(df,1)
   (segLen, rem)=divrem(rows, segments)
   firstRow(s)=1+segLen*(s-1)
   lastRow(s)=segLen*s
   getRange(s)= s == segments ? range(firstRow(s), lastRow(s)+rem) : range(firstRow(s), lastRow(s)) 
-  [view(a, getRange(n), : ) for n in 1:segments]
+  [view(df, getRange(n), : ) for n in 1:segments]
 end
 
 """Call lm for each segment.  Returns a collection of glm results
  CX and Cy are collections of matrices of the independant and dependant variables
 """
-function slm(CX::Vector, Cy::Vector, wts=wts)
-  for r in 1:size(CX,1)
-    fit(LinearModel, CX[r,:], y[r,:])
-  end
+function slm(f::FormulaTerm, v::Vector)
+  [lm(f, df) for df in v]
 end
 
 end # module SGLM

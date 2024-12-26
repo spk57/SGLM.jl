@@ -18,12 +18,21 @@ form = DataFrame([[0.1,0.3,0.5,0.6,0.7,0.9],[0.086,0.269,0.446,0.538,0.626,0.782
   @test isa(lm1, StatsModels.TableRegressionModel)
 end
 
-@testset "Test Segmentation" begin
+# @testset "Test Matrix Segmentation" begin
+#   cld=DataFrame(cl)
+#   cld.ts=Dates.value.(cld.timestamp)
+#   cld2=select!(cld, Not([:timestamp]))
+#   clm=Matrix(cld2)
+#   s3=segment(clm, 3)
+#   @test size(s3, 1) == 3
+#   @test size(s3[1]) == (166,2)
+# end
+
+@testset "Test slm" begin
   cld=DataFrame(cl)
   cld.ts=Dates.value.(cld.timestamp)
   cld2=select!(cld, Not([:timestamp]))
-  clm=Matrix(cld2)
-  s3=segment(clm, 3)
-  @test size(s3, 1) == 3
-  @test size(s3[1]) == (166,2)
+  clseg=segment(cld2)
+  f=@formula(Close ~ ts)
+  slm(f, clseg)
 end
