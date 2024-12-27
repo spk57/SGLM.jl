@@ -10,6 +10,6 @@ Leverages Generalized Linear Model (https://github.com/JuliaStats/GLM.jl) to mod
 * Use `slm1` to call lm on each segment 
 
 ## Examples
-* [MarketData](./examples/MarketData.md)
+* [MarketExample](docs/MarketExample.md)
 
 Note: Under Development
