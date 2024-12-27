@@ -5,7 +5,7 @@ https://github.com/JuliaStats/GLM.jl.git
 """
 module SGLM
 
-export sglm, segment
+export sglm, segment, slm
 
 using GLM
 using DataFrames
