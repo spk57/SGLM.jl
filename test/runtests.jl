@@ -37,6 +37,6 @@ end
   @test size(pred,1)==len
   breakpoints=[20,40,100,234,355,423]
   clbr=segment(cld2, breakpoints=breakpoints)
-  @test size(clbr, 1) == length(breakpoints)-1
+  @test size(clbr, 1) == length(breakpoints)+1
 
 end

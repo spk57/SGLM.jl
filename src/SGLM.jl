@@ -25,9 +25,13 @@ function segment(df::DataFrame; segments=1, breakpoints=missing)
   lastRow(s)=segLen*s
   nBreaks=!ismissing(breakpoints) && length(breakpoints) > 1 ? length(breakpoints) : 1
   getRange(s)= s == segments ? range(firstRow(s), lastRow(s)+rem) : range(firstRow(s), lastRow(s)) 
-  nextRange(s)=range(breakpoints[s-1], breakpoints[s])
+  nextRange(s, bp)=range(bp[s-1], bp[s])
   if nBreaks > 1
-    [view(df, nextRange(n), :) for n in 2:nBreaks]
+    bp=copy(breakpoints)
+    bp[1] != 1 ? pushfirst!(bp,1) : nothing
+    bp[end] != rows ? push!(bp,rows) : nothing
+    println(bp)
+    [view(df, nextRange(n, bp), :) for n in 2:length(bp)]
   else
     [view(df, getRange(n), : ) for n in 1:segments]
   end
