@@ -14,17 +14,23 @@ using StatsModels
 using Plots
 
 """
-Segment a dataframe into <segments> evenly spaced segments.  
-Returns a collection of <segments> views of dataframes
-Note: Non evenly divisible rows are included in the last segment
+Segment a dataframe into `segments` evenly spaced segments or broken at breakpoints
+Returns a collection of `segments` views of dataframes
+Note: If length of df is not evenly divisible, the remaining rows are included in the last segment
 """
-function segment(df::DataFrame, segments::Int)
+function segment(df::DataFrame; segments=1, breakpoints=missing)
   rows=size(df,1)
   (segLen, rem)=divrem(rows, segments)
   firstRow(s)=1+segLen*(s-1)
   lastRow(s)=segLen*s
+  nBreaks=!ismissing(breakpoints) && length(breakpoints) > 1 ? length(breakpoints) : 1
   getRange(s)= s == segments ? range(firstRow(s), lastRow(s)+rem) : range(firstRow(s), lastRow(s)) 
-  [view(df, getRange(n), : ) for n in 1:segments]
+  nextRange(s)=range(breakpoints[s-1], breakpoints[s])
+  if nBreaks > 1
+    [view(df, nextRange(n), :) for n in 2:nBreaks]
+  else
+    [view(df, getRange(n), : ) for n in 1:segments]
+  end
 end
 
 """Call lm for each segment.  Returns a collection of glm results
