@@ -34,3 +34,6 @@ plot!(title="Market Data with segmented Linear Fit and Linear 2nd Order fit")
 yaxis!("Closing Price")
 xaxis!("Days from Start")
 ```
+
+## Results
+![MarketExample](MarketExample.svg)
