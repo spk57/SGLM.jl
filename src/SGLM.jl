@@ -5,12 +5,13 @@ https://github.com/JuliaStats/GLM.jl.git
 """
 module SGLM
 
-export sglm, segment, slm
+export segment, unsegment, slm
 
 using GLM
 using DataFrames
 using StatsBase
 using StatsModels
+using Plots
 
 """Call glm for each segment.  Returns a collection of glm results. </br>"""
 #function sglm(formula::FormulaTerm, data::DataFrame, segments=1, family, link, segments=1)
@@ -52,4 +53,13 @@ function slm(f::FormulaTerm, v::Vector)
   [lm(f, df) for df in v]
 end
 
+"Recombine segments into 1 prediction matrix"
+getPredict(s)=mapreduce(predict, vcat, s)
+"Recombine segments into 1 residual matrix"
+getResiduals(s)=mapreduce(residuals, vcat, s)
+
+"Get a vector of coefficients"
+getCoef(s::Vector)=map(coef, s)
+"Get a vector of deviance values"
+getDeviance(s)=mapreduce(deviance, vcat, s)
 end # module SGLM

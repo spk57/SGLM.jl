@@ -30,13 +30,19 @@ end
 
 @testset "Test slm" begin
   cld=DataFrame(cl)
+  len=size(cld,1)
   segments=3
-  cld.ts=Dates.value.(cld.timestamp)
+  cld.x=1:len
   cld2=select!(cld, Not([:timestamp]))
   clseg=segment(cld2, 3)
+
   @test size(clseg, 1) == 3
   @test size(clseg[1]) == (166,2)
-  f=@formula(Close ~ ts -1)
+
+  f=@formula(Close ~ x)
   lmv=slm(f, clseg)
+  pred=getPredict(lmv)
+
   @test size(lmv,1) == 3
+  @test size(pred,1)==len
 end
