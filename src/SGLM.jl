@@ -18,7 +18,7 @@ Segment a dataframe into <segments> evenly spaced segments.
 Returns a collection of <segments> views of dataframes
 Note: Non evenly divisible rows are included in the last segment
 """
-function segment(df::DataFrame, segments)
+function segment(df::DataFrame, segments::Int)
   rows=size(df,1)
   (segLen, rem)=divrem(rows, segments)
   firstRow(s)=1+segLen*(s-1)
