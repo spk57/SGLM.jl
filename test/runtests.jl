@@ -42,4 +42,5 @@ end
   ta=TimeArray(cld, timestamp=:timestamp)
   ts=segment(ta, Year)
   @test length(ts)==2
+  tlm=slm(f, ts)
 end
