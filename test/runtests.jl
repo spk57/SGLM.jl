@@ -45,4 +45,12 @@ end
   tlm=slm(f, ts)
   p=getPredict(tlm)
   @test length(p) == len
+  @test mapreduce(length, +,  tsm) == len
+  tsm=segment(ta, Month)
+  @test length(tsm)==24
+  tlm=slm(f, tsm)
+  pm=getPredict(tlm)
+  @test length(pm) == len
+  @test mapreduce(length, +,  tlm) == len
+
 end

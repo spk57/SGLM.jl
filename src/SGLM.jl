@@ -37,10 +37,9 @@ Segment a TimeSeries into `segments` by time grouping
 """
 function segment(ta::TimeArray, period=Year)  
   firstDate=firstDay(timestamp(ta[1])[1], period)
-#  lastDate =timestamp(ta[end])[1]-period(1)
   lastDate =timestamp(ta[end])[1]
   tr=firstDate:period(1):lastDate
-  [fromTo(ta, p, p+period(1)) for p in tr]
+  [fromTo(ta, p, p+period(1)-Day(1)) for p in tr]
 end
 
 """
