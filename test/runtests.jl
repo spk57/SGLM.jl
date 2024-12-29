@@ -43,4 +43,6 @@ end
   ts=segment(ta, Year)
   @test length(ts)==2
   tlm=slm(f, ts)
+  p=getPredict(tlm)
+  @test length(p) == len
 end

@@ -4,6 +4,7 @@ using MarketData
 using StatsPlots
 using DataFrames
 using StatsModels
+using Plots
 
 #Load Market Data
 cld=DataFrame(cl)
