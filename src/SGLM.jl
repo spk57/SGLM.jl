@@ -12,6 +12,36 @@ using DataFrames
 using StatsBase
 using StatsModels
 using Plots
+using TimeSeries
+using Dates
+
+"Combine TimeSeries From and To"
+fromTo(ta, f, t)=to(from(ta, f), t)
+
+"Get the first day of the period"
+function firstDay(d, period)
+  d = if period==Year 
+    Dates.firstdayofyear(d)
+  elseif period == Quarter
+    Dates.firstdayofquarter(d)
+  elseif period == Month
+    Dates.firstdayofmonth(d)
+  elseif period == Week
+    Dates.firstdayofweek(d)
+  else throw("Date adjuster function not found:  $period")
+  end
+end
+
+"""
+Segment a TimeSeries into `segments` by time grouping
+"""
+function segment(ta::TimeArray, period=Year)  
+  firstDate=firstDay(timestamp(ta[1])[1], period)
+#  lastDate =timestamp(ta[end])[1]-period(1)
+  lastDate =timestamp(ta[end])[1]
+  tr=firstDate:period(1):lastDate
+  [fromTo(ta, p, p+period(1)) for p in tr]
+end
 
 """
 Segment a dataframe into `segments` evenly spaced segments or broken at breakpoints
@@ -38,10 +68,15 @@ function segment(df::DataFrame; segments=1, breakpoints=missing)
 end
 
 """Call lm for each segment.  Returns a collection of glm results
- CX and Cy are collections of matrices of the independant and dependant variables
+v is a Vector of DataFrames
 """
 function slm(f::FormulaTerm, v::Vector)
-  [lm(f, df) for df in v]
+  if isa(v[1], AbstractDataFrame)
+    return [lm(f, df) for df in v]
+  elseif isa(v[1], AbstractTimeSeries)
+    return [lm(f, DataFrame(ts)) for ts in v]
+  else throw("Illegal datatype in Vector $(typeof(v[1]))")
+  end
 end
 
 "Recombine segments into 1 prediction matrix"

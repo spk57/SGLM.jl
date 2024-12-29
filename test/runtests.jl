@@ -23,11 +23,10 @@ end
   len=size(cld,1)
   segments=3
   cld.x=1:len
-  cld2=select!(cld, Not([:timestamp]))
-  clseg=segment(cld2, segments=segments)
+  clseg=segment(cld, segments=segments)
 
   @test size(clseg, 1) == segments
-  @test size(clseg[1]) == (166,2)
+  @test size(clseg[1]) == (166,3)
 
   f=@formula(Close ~ x)
   lmv=slm(f, clseg)
@@ -36,7 +35,7 @@ end
   @test size(lmv,1) == segments
   @test size(pred,1)==len
   breakpoints=[20,40,100,234,355,423]
-  clbr=segment(cld2, breakpoints=breakpoints)
+  clbr=segment(cld, breakpoints=breakpoints)
   @test size(clbr, 1) == length(breakpoints)+1
 
 end
