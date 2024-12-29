@@ -5,6 +5,7 @@ using Test
 using DataFrames
 using MarketData
 using Dates
+using TimeSeries
 
 ## Formaldehyde data from the R Datasets package
 form = DataFrame([[0.1,0.3,0.5,0.6,0.7,0.9],[0.086,0.269,0.446,0.538,0.626,0.782]],
@@ -38,4 +39,7 @@ end
   clbr=segment(cld, breakpoints=breakpoints)
   @test size(clbr, 1) == length(breakpoints)+1
 
+  ta=TimeArray(cld, timestamp=:timestamp)
+  ts=segment(ta, Year)
+  @test length(ts)==2
 end
