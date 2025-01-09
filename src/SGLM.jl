@@ -46,6 +46,7 @@ end
 Segment a dataframe into `segments` evenly spaced segments or broken at breakpoints
 Returns a collection of `segments` views of dataframes
 Note: If length of df is not evenly divisible, the remaining rows are included in the last segment
+breakpoints indiciate the first row of a new segment
 """
 function segment(df::DataFrame; segments=1, breakpoints=missing)
   rows=size(df,1)
@@ -54,12 +55,11 @@ function segment(df::DataFrame; segments=1, breakpoints=missing)
   lastRow(s)=segLen*s
   nBreaks=!ismissing(breakpoints) && length(breakpoints) > 1 ? length(breakpoints) : 1
   getRange(s)= s == segments ? range(firstRow(s), lastRow(s)+rem) : range(firstRow(s), lastRow(s)) 
-  nextRange(s, bp)=range(bp[s-1], bp[s])
+  nextRange(s, bp)=range(bp[s-1], bp[s]-1)
   if nBreaks > 1
     bp=copy(breakpoints)
-    bp[1] != 1 ? pushfirst!(bp,1) : nothing
-    bp[end] != rows ? push!(bp,rows) : nothing
-    println(bp)
+    bp[1] != 1 ? pushfirst!(bp,1) : nothing #Add first and last rows if not included
+    bp[end] != rows ? push!(bp,rows+1) : nothing
     [view(df, nextRange(n, bp), :) for n in 2:length(bp)]
   else
     [view(df, getRange(n), : ) for n in 1:segments]

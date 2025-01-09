@@ -25,32 +25,39 @@ end
   segments=3
   cld.x=1:len
   clseg=segment(cld, segments=segments)
-
+ 
+  #Test segments option 
   @test size(clseg, 1) == segments
   @test size(clseg[1]) == (166,3)
-
   f=@formula(Close ~ x)
   lmv=slm(f, clseg)
   pred=getPredict(lmv)
-
   @test size(lmv,1) == segments
   @test size(pred,1)==len
+
+  #Test breakpoint option 
   breakpoints=[20,40,100,234,355,423]
   clbr=segment(cld, breakpoints=breakpoints)
   @test size(clbr, 1) == length(breakpoints)+1
+  lmbr=slm(f, clbr)
+  pmr=getPredict(lmbr)
+  @test mapreduce(length, +,  pmr) == len
 
+  #Test time breakpoint option
+  #Test year break
   ta=TimeArray(cld, timestamp=:timestamp)
   ts=segment(ta, Year)
   @test length(ts)==2
-  tlm=slm(f, ts)
-  p=getPredict(tlm)
+  tsy=slm(f, ts)
+  p=getPredict(tsy)
   @test length(p) == len
-  @test mapreduce(length, +,  tsm) == len
+
+  #Test month break 
   tsm=segment(ta, Month)
   @test length(tsm)==24
   tlm=slm(f, tsm)
   pm=getPredict(tlm)
   @test length(pm) == len
-  @test mapreduce(length, +,  tlm) == len
+  @test mapreduce(length, +,  pm) == len
 
 end
